@@ -6,5 +6,5 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("accounts/", include("accounts.urls")),
     path("expenses/", include("expenses.urls")),
-    path("", lambda request: redirect("expenses:dashboard")),
+    path("", lambda request: redirect("accounts:login")),
 ]
