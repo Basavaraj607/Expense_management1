@@ -8,7 +8,9 @@ load_dotenv(BASE_DIR / ".env")
 
 SECRET_KEY = os.getenv("SECRET_KEY", "unsafe-secret")
 DEBUG = os.getenv("DEBUG", "False") == "True"
-ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
+
+allowed_hosts_env = os.getenv("DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1")
+ALLOWED_HOSTS = [h.strip() for h in allowed_hosts_env.split(",") if h.strip()]
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -39,22 +41,28 @@ TEMPLATES = [
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         "DIRS": [BASE_DIR / "templates"],
         "APP_DIRS": True,
-        "OPTIONS": {"context_processors": [
-            "django.template.context_processors.debug",
-            "django.template.context_processors.request",
-            "django.contrib.auth.context_processors.auth",
-            "django.contrib.messages.context_processors.messages",
-        ]},
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.debug",
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
+            ]
+        },
     }
 ]
 
 WSGI_APPLICATION = "company.wsgi.application"
 
-DATABASE_URL = os.getenv("postgresql://expense_management_db_user:F3T0c0gK1T3gYOYLAsjivJiRYuwDQgkf@dpg-d4tvrv4hg0os739ftv20-a.oregon-postgres.render.com:5432/expense_management_db")
-if DATABASE_URL:
-    DATABASES = {"default": dj_database_url.parse("postgresql://expense_management_db_user:F3T0c0gK1T3gYOYLAsjivJiRYuwDQgkf@dpg-d4tvrv4hg0os739ftv20-a.oregon-postgres.render.com:5432/expense_management_db", conn_max_age=600)}
+DATABASE_URL_ENV = os.getenv("DATABASE_URL")
+if DATABASE_URL_ENV:
+    DATABASES = {
+        "default": dj_database_url.parse(DATABASE_URL_ENV, conn_max_age=600, ssl_require=True)
+    }
 else:
-    DATABASES = {"default": {"ENGINE": "django.db.backends.sqlite3", "NAME": BASE_DIR / "db.sqlite3"}}
+    DATABASES = {
+        "default": dj_database_url.config(default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}")
+    }
 
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
@@ -79,5 +87,3 @@ AUTH_USER_MODEL = "accounts.User"
 LOGIN_URL = "accounts:login"
 LOGIN_REDIRECT_URL = "expenses:dashboard"
 LOGOUT_REDIRECT_URL = "accounts:login"
-
-
