@@ -27,3 +27,4 @@ class ExpenseForm(forms.ModelForm):
         if ed > timezone.localdate():
             raise forms.ValidationError("Expense date cannot be in the future")
         return ed
+
