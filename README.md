@@ -51,6 +51,20 @@ DATABASE_URL=sqlite:///db.sqlite3
 
 (Use the PostgreSQL URL only for deployment, not local.)
 
+
+----------------------------------------------------------------------
+TEST LOGIN CREDENTIALS
+----------------------------------------------------------------------
+
+ADMIN / MANAGER LOGIN:
+username: basu
+password: basu123
+
+EMPLOYEE LOGIN:
+username: vishwa
+password: basu1234
+
+
 ## 5. Apply Migrations
 python manage.py migrate
 
