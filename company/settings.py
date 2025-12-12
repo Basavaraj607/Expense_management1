@@ -40,16 +40,11 @@ TEMPLATES = [
     }
 ]
 WSGI_APPLICATION = "company.wsgi.application"
+import dj_database_url
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.getenv("POSTGRES_DB", "expense_db"),
-        "USER": os.getenv("POSTGRES_USER", "dbuser"),
-        "PASSWORD": os.getenv("POSTGRES_PASSWORD", "basu123"),
-        "HOST": os.getenv("POSTGRES_HOST", "127.0.0.1"),
-        "PORT": os.getenv("POSTGRES_PORT", "5432"),
-    }
+    "default": dj_database_url.parse(os.getenv("postgresql://expense_management_db_user:F3T0c0gK1T3gYOYLAsjivJiRYuwDQgkf@dpg-d4tvrv4hg0os739ftv20-a/expense_management_db"))
 }
+
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
