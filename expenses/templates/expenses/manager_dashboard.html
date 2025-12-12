@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row">
+  <div class="col-md-12">
+    <h4>Manager Dashboard</h4>
+    <div class="row mb-3">
+      <div class="col-md-4">
+        <div class="card p-3">
+          <h6>Pending claims</h6>
+          <p class="h3">{{ pending_count }}</p>
+        </div>
+      </div>
+      <div class="col-md-8">
+        <div class="card p-3">
+          <h6>Pending total amount</h6>
+          <p class="h3">₹{{ total_pending }}</p>
+        </div>
+      </div>
+    </div>
+    <h5>Category summary</h5>
+    <ul class="list-group">
+      {% for s in category_summary %}
+      <li class="list-group-item d-flex justify-content-between">
+        <div>{{ s.category }}</div>
+        <div>₹{{ s.total }}</div>
+      </li>
+      {% empty %}
+      <li class="list-group-item">No data</li>
+      {% endfor %}
+    </ul>
+    <div class="mt-3">
+      <a class="btn btn-primary" href="{% url 'expenses:manager_pending' %}">Review Pending</a>
+    </div>
+  </div>
+</div>
+{% endblock %}
