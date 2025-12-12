@@ -81,4 +81,3 @@ LOGIN_REDIRECT_URL = "expenses:dashboard"
 LOGOUT_REDIRECT_URL = "accounts:login"
 
 
-DATABASE_URL = os.getenv("postgresql://expense_management_db_user:F3T0c0gK1T3gYOYLAsjivJiRYuwDQgkf@dpg-d4tvrv4hg0os739ftv20-a.oregon-postgres.render.com:5432/expense_management_db")
