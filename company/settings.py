@@ -41,9 +41,25 @@ TEMPLATES = [
 ]
 WSGI_APPLICATION = "company.wsgi.application"
 import dj_database_url
-DATABASES = {
-    "default": dj_database_url.parse(os.getenv("postgresql://expense_management_db_user:F3T0c0gK1T3gYOYLAsjivJiRYuwDQgkf@dpg-d4tvrv4hg0os739ftv20-a/expense_management_db"))
-}
+
+DATABASE_URL = os.getenv("postgresql://expense_management_db_user:F3T0c0gK1T3gYOYLAsjivJiRYuwDQgkf@dpg-d4tvrv4hg0os739ftv20-a.oregon-postgres.render.com:5432/expense_management_db")
+
+if DATABASE_URL:
+    DATABASES = {
+        "default": dj_database_url.parse("postgresql://expense_management_db_user:F3T0c0gK1T3gYOYLAsjivJiRYuwDQgkf@dpg-d4tvrv4hg0os739ftv20-a.oregon-postgres.render.com:5432/expense_management_db", conn_max_age=600)
+    }
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": os.getenv("POSTGRES_DB", "expense_db"),
+            "USER": os.getenv("POSTGRES_USER", "dbuser"),
+            "PASSWORD": os.getenv("POSTGRES_PASSWORD", "basu123"),
+            "HOST": os.getenv("POSTGRES_HOST", "127.0.0.1"),
+            "PORT": os.getenv("POSTGRES_PORT", "5432"),
+        }
+    }
+
 
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
