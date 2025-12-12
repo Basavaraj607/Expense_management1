@@ -18,8 +18,10 @@
         {% empty %}
         <tr><td colspan="6">No pending expenses.</td></tr>
         {% endfor %}
+        
       </tbody>
     </table>
   </div>
+        <a href="{% url 'expenses:dashboard' %}" class="btn btn-secondary">Back to Dashboard</a>
 </div>
 {% endblock %}
