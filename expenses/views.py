@@ -8,14 +8,37 @@ from django.db.models import Sum
 @login_required
 def dashboard(request):
     if request.user.role == "MANAGER":
-        pending = Expense.objects.filter(status=Expense.STATUS_PENDING).order_by("submitted_date")
-        total_pending = pending.aggregate(total=Sum("amount"))["total"] or 0
-        category_summary = Expense.objects.values("category").annotate(total=Sum("amount")).order_by("category")
-        return render(request, "expenses/manager_dashboard.html", {"pending_count": pending.count(), "total_pending": total_pending, "category_summary": category_summary})
+        pending_qs = Expense.objects.filter(status=Expense.STATUS_PENDING)
+        approved_qs = Expense.objects.filter(status=Expense.STATUS_APPROVED)
+        rejected_qs = Expense.objects.filter(status=Expense.STATUS_REJECTED)
+
+        context = {
+            "pending_count": pending_qs.count(),
+            "approved_count": approved_qs.count(),
+            "rejected_count": rejected_qs.count(),
+
+            "total_pending": pending_qs.aggregate(total=Sum("amount"))["total"] or 0,
+            "total_approved": approved_qs.aggregate(total=Sum("amount"))["total"] or 0,
+            "total_rejected": rejected_qs.aggregate(total=Sum("amount"))["total"] or 0,
+
+            "category_summary": Expense.objects.values("category")
+            .annotate(total=Sum("amount"))
+            .order_by("category"),
+        }
+
+        return render(request, "expenses/manager_dashboard.html", context)
+
     else:
         recent_expenses = request.user.expenses.order_by("-submitted_date")[:5]
         pending_count = request.user.expenses.filter(status=Expense.STATUS_PENDING).count()
-        return render(request, "expenses/employee_dashboard.html", {"recent_expenses": recent_expenses, "pending_count": pending_count})
+        return render(
+            request,
+            "expenses/employee_dashboard.html",
+            {
+                "recent_expenses": recent_expenses,
+                "pending_count": pending_count,
+            },
+        )
 
 @login_required
 def expense_create(request):
@@ -67,3 +90,34 @@ def manager_review(request, pk):
         exp.save()
         return redirect("expenses:manager_pending")
     return render(request, "expenses/expense_detail.html", {"expense": exp, "manager_review": True})
+
+
+@login_required
+def manager_report(request):
+    if request.user.role != "MANAGER":
+        return redirect("expenses:dashboard")
+
+    expenses = Expense.objects.all().order_by("-submitted_date")
+
+    summary = {
+        "approved_count": expenses.filter(status=Expense.STATUS_APPROVED).count(),
+        "rejected_count": expenses.filter(status=Expense.STATUS_REJECTED).count(),
+        "pending_count": expenses.filter(status=Expense.STATUS_PENDING).count(),
+
+        "approved_total": expenses.filter(status=Expense.STATUS_APPROVED).aggregate(
+            total=Sum("amount")
+        )["total"] or 0,
+
+        "rejected_total": expenses.filter(status=Expense.STATUS_REJECTED).aggregate(
+            total=Sum("amount")
+        )["total"] or 0,
+    }
+
+    return render(
+        request,
+        "expenses/manager_report.html",
+        {
+            "expenses": expenses,
+            "summary": summary,
+        },
+    )
