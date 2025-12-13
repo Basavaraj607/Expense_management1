@@ -41,6 +41,9 @@ Step-by-Step Instructions to Run Locally
 Deployed Application URL
 https://expense-management1.onrender.com
 
+Demo Video URL :
+https://www.loom.com/share/e7a16ef95e444dbdb8e4bff705c53a52
+
 Test Credentials
 Employee:
 Username: vishwa
