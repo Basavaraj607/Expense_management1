@@ -1,86 +1,56 @@
-# Expense Management System
+EXPENSE MANAGEMENT SYSTEM
 
-A Django web application that allows employees to submit expenses and managers/finance teams to approve or reject them. Useful for tracking reimbursements within an organization.
+Project Description
+The Expense Management System allows employees to submit expense claims and track their status.
+Managers can review pending claims, approve or reject them, and view expense summaries.
+The system ensures role-based access and a smooth approval workflow.
 
----
+Technology Stack
+Backend: Django (Python)
+Frontend: Django Templates, Bootstrap
+Database: PostgreSQL (Production), SQLite (Local)
+Authentication: Django Custom User Model
+Deployment: Render
 
-## 🚀 Features
+Database Setup Instructions
+The project uses PostgreSQL in production via DATABASE_URL.
+For local development, SQLite is used by default.
 
-### For Employees
-- Submit expense claims (amount, description, receipt upload)
-- View expense history
-- Track approval status
+To use PostgreSQL locally:
+1. Create a PostgreSQL database
+2. Set DATABASE_URL in .env file
+3. Run migrations
 
-### For Managers / Finance
-- View pending expense claims
-- Approve or reject expenses
-- Add comments for decisions
-- View expense summaries
+Step-by-Step Instructions to Run Locally
+1. Clone the repository
+2. Create and activate virtual environment
+3. Install dependencies:
+   pip install -r requirements.txt
+4. Create .env file with:
+   SECRET_KEY
+   DEBUG=True
+   DATABASE_URL (optional)
+5. Run migrations:
+   python manage.py migrate
+6. Create superuser:
+   python manage.py createsuperuser
+7. Run server:
+   python manage.py runserver
+8. Open http://127.0.0.1:8000
 
----
+Deployed Application URL
+https://expense-management1.onrender.com
 
-## 🛠 Technology Stack
+Test Credentials
+Employee:
+Username: vishwa
+Password:basu1234
 
-- **Backend:** Django 6
-- **Frontend:** HTML, CSS, Bootstrap
-- **Database:** PostgreSQL (Render Cloud)
-- **File Storage:** Local (staticfiles)
-- **Deployment:** Render
+Manager:
+Username: basu
+Password: basu123
 
----
-
-# Step-by-Step Instructions to Run the Project Locally
-
-## 1. Clone the Repository
-git clone https://github.com/Basavaraj607/Expense_Management1
-cd company
-## 2. Create Virtual Environment
-python -m venv env
-env\Scripts\activate   (Windows)
-source env/bin/activate (Mac/Linux)
-
-## 3. Install Dependencies
-pip install -r requirements.txt
-
-## 4. Create .env File
-In the project root, add a file named `.env`:
-
-SECRET_KEY=your-secret-key
-DEBUG=True
-DATABASE_URL=sqlite:///db.sqlite3
-
-(Use the PostgreSQL URL only for deployment, not local.)
-
-
-----------------------------------------------------------------------
-TEST LOGIN CREDENTIALS
-----------------------------------------------------------------------
-
-ADMIN / MANAGER LOGIN:
-username: basu
-password: basu123
-
-EMPLOYEE LOGIN:
-username: vishwa
-password: basu1234
-
-
-## 5. Apply Migrations
-python manage.py migrate
-
-## 6. Create Superuser (for login)
-python manage.py createsuperuser
-
-Enter username, email and password.
-
-## 7. Run the Development Server
-python manage.py runserver
-
-Server will start at:
-http://127.0.0.1:8000/
-
-## 8. Login
-Use your superuser credentials or test accounts (if provided in README).
-
-## 9. Stop Server
-Press CTRL + C in terminal to stop the server.
+Known Limitations
+• No file upload for receipts (text only)
+• Basic reports (no CSV export)
+• UI kept simple due to time constraints
